@@ -3,7 +3,7 @@ import apiclient from "../../api-client/";
 import Movies from "./movies";
 
 export default ({ searchTerm, ...props }) => {
-  const [fetchSate, setFetchState] = useState({
+  const [fetchState, setFetchState] = useState({
     loading: true,
     error: false,
     success: false,
@@ -38,5 +38,5 @@ export default ({ searchTerm, ...props }) => {
     };
     fetchData();
   }, [searchTerm]);
-  return <Movies {...props} fetchSate={fetchSate} />;
+  return <Movies {...props} fetchState={fetchState} />;
 };

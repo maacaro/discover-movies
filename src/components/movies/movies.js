@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default Movies;
 
-function Movies({ imgUrl, imgDetailUrl, fetchSate }) {
+function Movies({
+  imgUrl,
+  imgDetailUrl,
+  fetchState: {
+    data: { movies: allMovies },
+    loading,
+    success
+  }
+}) {
   const [movieDetail, setMovieDetail] = useState({
     shouldLightBoxBeOpen: false,
     movie: {}
   });
+  const [movies, setMovies] = useState([...allMovies]);
+
+  useEffect(() => {
+    setMovies([...allMovies]);
+  }, [allMovies]);
 
   const handleImageClick = movie => () => {
     setMovieDetail({ shouldLightBoxBeOpen: true, movie: { ...movie } });
@@ -14,16 +27,19 @@ function Movies({ imgUrl, imgDetailUrl, fetchSate }) {
   const handleLightBoxOnClose = () =>
     setMovieDetail({ shouldLightBoxBeOpen: false, movie: {} });
 
+  const handleRateChanges = rate => {
+    setMovies(allMovies.filter(({ vote_average: avgRate }) => avgRate >= rate));
+  };
+
   const { shouldLightBoxBeOpen, movie } = movieDetail;
-  const { movies } = fetchSate.data;
 
   return (
     <>
-      {fetchSate.loading === true && <div className="loader"></div>}
-      {fetchSate.success === true && (
+      {loading === true && <div className="loader"></div>}
+      {success === true && (
         <>
           <div className="review">
-            <Rating />
+            <Rating onRateChange={handleRateChanges} />
           </div>
           <ul>
             {movies.map(
@@ -104,10 +120,11 @@ function LightBox({ movie, onClose }) {
   );
 }
 
-function Rating() {
+function Rating({ onRateChange }) {
   const [rate, setRate] = useState(0);
   const handleStarClick = value => () => {
     setRate(value);
+    onRateChange(value);
   };
   return (
     <>
