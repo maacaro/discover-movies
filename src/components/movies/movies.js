@@ -21,39 +21,44 @@ function Movies({ imgUrl, imgDetailUrl, fetchSate }) {
     <>
       {fetchSate.loading === true && <div className="loader"></div>}
       {fetchSate.success === true && (
-        <ul>
-          {movies.map(
-            ({
-              poster_path: posterPath,
-              id,
-              original_title: title,
-              overview,
-              vote_average: rate,
-              release_date: releaseDate,
-              popularity
-            }) => (
-              <li key={id}>
-                <img
-                  src={
-                    (posterPath && `${imgUrl}${posterPath}`) ||
-                    "https://via.placeholder.com/185x277"
-                  }
-                  alt={title}
-                  onClick={handleImageClick({
-                    title,
-                    overview,
-                    rate,
-                    releaseDate,
-                    popularity,
-                    image:
-                      (posterPath && `${imgDetailUrl}${posterPath}`) ||
-                      "https://via.placeholder.com/342×502px"
-                  })}
-                />
-              </li>
-            )
-          )}
-        </ul>
+        <>
+          <div className="review">
+            <Rating />
+          </div>
+          <ul>
+            {movies.map(
+              ({
+                poster_path: posterPath,
+                id,
+                original_title: title,
+                overview,
+                vote_average: rate,
+                release_date: releaseDate,
+                popularity
+              }) => (
+                <li key={id}>
+                  <img
+                    src={
+                      (posterPath && `${imgUrl}${posterPath}`) ||
+                      "https://via.placeholder.com/185x277"
+                    }
+                    alt={title}
+                    onClick={handleImageClick({
+                      title,
+                      overview,
+                      rate,
+                      releaseDate,
+                      popularity,
+                      image:
+                        (posterPath && `${imgDetailUrl}${posterPath}`) ||
+                        "https://via.placeholder.com/342×502px"
+                    })}
+                  />
+                </li>
+              )
+            )}
+          </ul>
+        </>
       )}
       {shouldLightBoxBeOpen && (
         <LightBox
@@ -96,5 +101,40 @@ function LightBox({ movie, onClose }) {
         </span>
       </div>
     </div>
+  );
+}
+
+function Rating() {
+  const [rate, setRate] = useState(0);
+  const handleStarClick = value => () => {
+    setRate(value);
+  };
+  return (
+    <>
+      <h2>Avg. Review</h2>
+      <div>
+        <span
+          className={(rate > 0 && "fa fa-star checked") || "fa fa-star"}
+          onClick={handleStarClick(2)}
+        ></span>
+        <span
+          className={(rate > 2 && "fa fa-star checked") || "fa fa-star"}
+          onClick={handleStarClick(4)}
+        ></span>
+        <span
+          className={(rate > 4 && "fa fa-star checked") || "fa fa-star"}
+          onClick={handleStarClick(6)}
+        ></span>
+        <span
+          className={(rate > 6 && "fa fa-star checked") || "fa fa-star"}
+          onClick={handleStarClick(8)}
+        ></span>
+        <span
+          className={(rate > 8 && "fa fa-star checked") || "fa fa-star"}
+          onClick={handleStarClick(10)}
+        ></span>
+        <span> & Up</span>
+      </div>
+    </>
   );
 }

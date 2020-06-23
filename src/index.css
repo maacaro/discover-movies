@@ -111,6 +111,15 @@ li > img {
 .modal-content > span {
   width: 100%;
 }
+.review {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  flex-direction: column;
+}
+.checked {
+  color: orange;
+}
 @media only screen and (min-width: 1224px) {
   header {
     max-height: 70vh;
