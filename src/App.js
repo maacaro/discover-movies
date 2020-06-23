@@ -42,7 +42,6 @@ function App() {
   const {
     images: { base_url: baseURL, poster_sizes: posterSizes }
   } = fetchSate.data;
-
   return (
     <>
       <header>
@@ -59,6 +58,11 @@ function App() {
             imgDetailUrl={`${baseURL}${posterSizes[3]}`}
             searchTerm={searchTerm}
           />
+        )}
+        {fetchSate.error === true && (
+          <div>
+            <span>something went wrong: {error} </span>
+          </div>
         )}
       </main>
     </>

@@ -34,7 +34,10 @@ function Movies({ imgUrl, imgDetailUrl, fetchSate }) {
             }) => (
               <li key={id}>
                 <img
-                  src={`${imgUrl}${posterPath}`}
+                  src={
+                    (posterPath && `${imgUrl}${posterPath}`) ||
+                    "https://via.placeholder.com/185x277"
+                  }
                   alt={title}
                   onClick={handleImageClick({
                     title,
@@ -42,7 +45,9 @@ function Movies({ imgUrl, imgDetailUrl, fetchSate }) {
                     rate,
                     releaseDate,
                     popularity,
-                    image: `${imgDetailUrl}${posterPath}`
+                    image:
+                      (posterPath && `${imgDetailUrl}${posterPath}`) ||
+                      "https://via.placeholder.com/342×502px"
                   })}
                 />
               </li>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import apiclient from "../../api-client/";
 import Movies from "./movies";
 
-export default props => {
+export default ({ searchTerm, ...props }) => {
   const [fetchSate, setFetchState] = useState({
     loading: true,
     error: false,
@@ -15,7 +15,8 @@ export default props => {
     const fetchData = async () => {
       try {
         const { results: movies } = await apiclient(
-          "discover/movie?sort_by=popularity.desc"
+          (searchTerm === "" && "discover/movie?sort_by=popularity.desc") ||
+            `/search/movie?query=${searchTerm}`
         );
         setFetchState({
           loading: false,
@@ -36,6 +37,6 @@ export default props => {
       }
     };
     fetchData();
-  }, []);
+  }, [searchTerm]);
   return <Movies {...props} fetchSate={fetchSate} />;
 };
