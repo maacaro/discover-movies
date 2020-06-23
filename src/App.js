@@ -1,32 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Search from "./components/search/";
+import Movies from "./components/movies/";
+import apiclient from "./api-client";
 
 function App() {
+  const [error, setError] = useState(null);
+  const [fetchSate, setFetchState] = useState({
+    loading: true,
+    error: false,
+    success: false,
+    data: {
+      movies: [],
+      images: {}
+    }
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [{ images }, { results: movies }] = await Promise.all([
+          apiclient("configuration"),
+          apiclient("discover/movie?sort_by=popularity.desc")
+        ]);
+        setFetchState({
+          loading: false,
+          error: false,
+          success: true,
+          data: { movies, images }
+        });
+      } catch (err) {
+        setFetchState({
+          loading: false,
+          error: true,
+          success: false,
+          data: {
+            movies: [],
+            images: {}
+          }
+        });
+        setError(err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const {
+    images: { base_url: baseURL, poster_sizes: posterSizes },
+    movies
+  } = fetchSate.data;
   return (
     <>
       <header>
-        <div class="hero-text">
+        <div className="hero-text">
           <h1>Discover and Search Your Favourite Movies</h1>
-          <input type="search" placeholder="Search for a movie"></input>
-          <button type="submit">
-            <i class="fa fa-search"></i>
-          </button>
+          <Search />
         </div>
       </header>
       <main>
-        <ul>
-          <li>
-            <img src="https://via.placeholder.com/300" alt="movie one" />
-          </li>
-          <li>
-            <img src="https://via.placeholder.com/300" alt="movie two" />
-          </li>
-          <li>
-            <img src="https://via.placeholder.com/300" alt="movie one" />
-          </li>
-          <li>
-            <img src="https://via.placeholder.com/300" alt="movie two" />
-          </li>
-        </ul>
+        {fetchSate.success === true && (
+          <Movies movies={movies} imgUrl={`${baseURL}${posterSizes[2]}`} />
+        )}
       </main>
     </>
   );
