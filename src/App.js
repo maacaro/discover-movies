@@ -63,6 +63,7 @@ function App() {
             imgDetailUrl={`${baseURL}${posterSizes[3]}`}
           />
         )}
+        {fetchSate.loading === true && <div className="loader"></div>}
       </main>
     </>
   );
