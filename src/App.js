@@ -57,7 +57,11 @@ function App() {
       </header>
       <main>
         {fetchSate.success === true && (
-          <Movies movies={movies} imgUrl={`${baseURL}${posterSizes[2]}`} />
+          <Movies
+            movies={movies}
+            imgUrl={`${baseURL}${posterSizes[2]}`}
+            imgDetailUrl={`${baseURL}${posterSizes[3]}`}
+          />
         )}
       </main>
     </>
