@@ -5,27 +5,24 @@ import apiclient from "./api-client";
 
 function App() {
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [fetchSate, setFetchState] = useState({
     loading: true,
     error: false,
     success: false,
     data: {
-      movies: [],
       images: {}
     }
   });
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [{ images }, { results: movies }] = await Promise.all([
-          apiclient("configuration"),
-          apiclient("discover/movie?sort_by=popularity.desc")
-        ]);
+        const { images } = await apiclient("configuration");
         setFetchState({
           loading: false,
           error: false,
           success: true,
-          data: { movies, images }
+          data: { images }
         });
       } catch (err) {
         setFetchState({
@@ -33,7 +30,6 @@ function App() {
           error: true,
           success: false,
           data: {
-            movies: [],
             images: {}
           }
         });
@@ -44,26 +40,26 @@ function App() {
   }, []);
 
   const {
-    images: { base_url: baseURL, poster_sizes: posterSizes },
-    movies
+    images: { base_url: baseURL, poster_sizes: posterSizes }
   } = fetchSate.data;
+
   return (
     <>
       <header>
         <div className="hero-text">
           <h1>Discover and Search Your Favourite Movies</h1>
-          <Search />
+          <Search onSearch={setSearchTerm} />
         </div>
       </header>
       <main>
+        {fetchSate.loading === true && <div className="loader"></div>}
         {fetchSate.success === true && (
           <Movies
-            movies={movies}
             imgUrl={`${baseURL}${posterSizes[2]}`}
             imgDetailUrl={`${baseURL}${posterSizes[3]}`}
+            searchTerm={searchTerm}
           />
         )}
-        {fetchSate.loading === true && <div className="loader"></div>}
       </main>
     </>
   );
