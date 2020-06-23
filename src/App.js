@@ -12,7 +12,22 @@ function App() {
           </button>
         </div>
       </header>
-      <main></main>
+      <main>
+        <ul>
+          <li>
+            <img src="https://via.placeholder.com/300" alt="movie one" />
+          </li>
+          <li>
+            <img src="https://via.placeholder.com/300" alt="movie two" />
+          </li>
+          <li>
+            <img src="https://via.placeholder.com/300" alt="movie one" />
+          </li>
+          <li>
+            <img src="https://via.placeholder.com/300" alt="movie two" />
+          </li>
+        </ul>
+      </main>
     </>
   );
 }
